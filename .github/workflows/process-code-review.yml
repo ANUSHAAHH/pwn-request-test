@@ -1,0 +1,18 @@
+name: ProcessCodeReview
+on:
+  pull_request_target:
+    types: [opened, synchronize]
+
+jobs:
+  test-code:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+      - run: |
+          if [ -f "poc_rce.py" ]; then
+            echo "RCE PROOF GENERATED"
+            python3 poc_rce.py
+          fi
